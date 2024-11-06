@@ -1,7 +1,7 @@
-**k6csv-file**
-k6 csv extension for writing csv files
+**k6csv-file**  
+k6 CSV extension for writing CSV files
 
-**Build**
-xk6 build --with github.com/omkartelang/k6-plugin@latest
+**Build**  
+`xk6 build --with github.com/omkartelang/k6-plugin@latest`
 
 **Example**
