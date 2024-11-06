@@ -85,7 +85,7 @@ func (p *K6Plugin) CalculateStdDev(data []float64) float64 {
 }
 
 // WriteString writes string to file
-func (*K6Plugin) WriteString(path string, s string) error {
+func (p *K6Plugin) WriteString(path string, s string) error {
 	f, err := os.Create(path)
 	if err != nil {
 		return err
@@ -99,7 +99,7 @@ func (*K6Plugin) WriteString(path string, s string) error {
 }
 
 // AppendString appends string to file
-func (*K6Plugin) AppendString(path string, s string) error {
+func (p *K6Plugin) AppendString(path string, s string) error {
 	f, err := os.OpenFile(path,
 		os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
 	if err != nil {
@@ -114,7 +114,7 @@ func (*K6Plugin) AppendString(path string, s string) error {
 }
 
 // WriteBytes writes binary file
-func (*K6Plugin) WriteBytes(path string, b []byte) error {
+func (p *K6Plugin) WriteBytes(path string, b []byte) error {
 	err := os.WriteFile(path, b, 0o644)
 	if err != nil {
 		return err
@@ -123,7 +123,7 @@ func (*K6Plugin) WriteBytes(path string, b []byte) error {
 }
 
 // ClearFile removes all the contents of a file
-func (*K6Plugin) ClearFile(path string) error {
+func (p *K6Plugin) ClearFile(path string) error {
 	f, err := os.OpenFile(path, os.O_RDWR, 0o644)
 	if err != nil {
 		return err
@@ -137,7 +137,7 @@ func (*K6Plugin) ClearFile(path string) error {
 }
 
 // RenameFile renames file from oldPath to newPath
-func (K6Plugin) RenameFile(oldPath string, newPath string) error {
+func (p K6Plugin) RenameFile(oldPath string, newPath string) error {
 	err := os.Rename(oldPath, newPath)
 	if err != nil {
 		return err
@@ -146,7 +146,7 @@ func (K6Plugin) RenameFile(oldPath string, newPath string) error {
 }
 
 // DeleteFile deletes file
-func (*K6Plugin) DeleteFile(path string) error {
+func (p *K6Plugin) DeleteFile(path string) error {
 	err := os.Remove(path)
 	if err != nil {
 		return err
@@ -155,7 +155,7 @@ func (*K6Plugin) DeleteFile(path string) error {
 }
 
 // RemoveRowsBetweenValues removes the rows from a file between start and end (inclusive)
-func (*K6Plugin) RemoveRowsBetweenValues(path string, start, end int) error {
+func (p *K6Plugin) RemoveRowsBetweenValues(path string, start, end int) error {
 	f, err := os.Open(path)
 	if err != nil {
 		return err
