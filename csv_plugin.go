@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"encoding/csv"
 	"go.k6.io/k6/js/modules"
-	"log"
 	"math"
 	"os"
 	"sort"
@@ -19,28 +18,15 @@ func init() {
 // K6Plugin is the main structure for the plugin
 type K6Plugin struct{}
 
-// New creates a new instance of the csv and returns it.
-func (p *K6Plugin) CreateCSVWriter(csvFile string) *csv.Writer {
-
-	file, err := os.OpenFile(csvFile, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0755)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	writercsv := csv.NewWriter(file)
-	defer writercsv.Flush()
-	return writercsv
-}
-
 // WriteCSVHeader writes the response to the specified CSV writer as a header.
 func (p *K6Plugin) WriteCSVHeader(writer *csv.Writer, response string) {
 	p.writeCSV(writer, response)
 }
 
 // WriteResponse writes the response to the specified CSV writer.
-func (p *K6Plugin) WriteResponse(writer *csv.Writer, response string) {
+/*func (p *K6Plugin) WriteResponse(writer *csv.Writer, response string) {
 	p.writeCSV(writer, response)
-}
+}*/
 
 // writeCSV is a helper function to write a response to a CSV writer.
 func (p *K6Plugin) writeCSV(writer *csv.Writer, response string) {
@@ -108,6 +94,25 @@ func (p *K6Plugin) WriteString(path string, s string) error {
 
 	if _, err := f.WriteString(s); err != nil {
 		return err
+	}
+	return nil
+}
+
+// New creates a new instance of the csv and returns it.
+func (p *K6Plugin) AppendCSVResponse(path string, response string) error {
+
+	file, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0o644)
+	if err != nil {
+		return err
+	}
+	defer func(file *os.File) {
+		_ = file.Close()
+	}(file)
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+	err1 := writer.Write(strings.Split(response, ","))
+	if err1 != nil {
+		return err1
 	}
 	return nil
 }
