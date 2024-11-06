@@ -99,7 +99,7 @@ func (p *K6Plugin) WriteString(path string, s string) error {
 }
 
 // New creates a new instance of the csv and returns it.
-func (p *K6Plugin) AppendCSVResponse(path string, response string) error {
+func (p *K6Plugin) AppendResponse(path string, response string) error {
 
 	file, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0o644)
 	if err != nil {
