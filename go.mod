@@ -2,7 +2,7 @@ module github.com/omkartelang/k6-plugin
 
 go 1.22
 
-//toolchain go1.23.2
+toolchain go1.23.2
 
 require go.k6.io/k6 v0.54.0
 
