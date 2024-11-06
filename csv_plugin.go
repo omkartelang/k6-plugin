@@ -23,11 +23,6 @@ func (p *K6Plugin) WriteCSVHeader(writer *csv.Writer, response string) {
 	p.writeCSV(writer, response)
 }
 
-// WriteResponse writes the response to the specified CSV writer.
-/*func (p *K6Plugin) WriteResponse(writer *csv.Writer, response string) {
-	p.writeCSV(writer, response)
-}*/
-
 // writeCSV is a helper function to write a response to a CSV writer.
 func (p *K6Plugin) writeCSV(writer *csv.Writer, response string) {
 	row := strings.Split(response, ",")
@@ -98,29 +93,27 @@ func (p *K6Plugin) WriteString(path string, s string) error {
 	return nil
 }
 
-// New creates a new instance of the csv and returns it.
+// AppendResponse appends a response to a CSV file.
 func (p *K6Plugin) AppendResponse(path string, response string) error {
-
 	file, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0o644)
 	if err != nil {
 		return err
 	}
-	defer func(file *os.File) {
-		_ = file.Close()
-	}(file)
+	defer file.Close()
+
 	writer := csv.NewWriter(file)
 	defer writer.Flush()
-	err1 := writer.Write(strings.Split(response, ","))
-	if err1 != nil {
-		return err1
+
+	err = writer.Write(strings.Split(response, ","))
+	if err != nil {
+		return err
 	}
 	return nil
 }
 
-// AppendString appends string to file
+// AppendString appends a string to a file.
 func (p *K6Plugin) AppendString(path string, s string) error {
-	f, err := os.OpenFile(path,
-		os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
+	f, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
 	if err != nil {
 		return err
 	}
@@ -132,7 +125,7 @@ func (p *K6Plugin) AppendString(path string, s string) error {
 	return nil
 }
 
-// WriteBytes writes binary file
+// WriteBytes writes binary data to a file.
 func (p *K6Plugin) WriteBytes(path string, b []byte) error {
 	err := os.WriteFile(path, b, 0o644)
 	if err != nil {
@@ -141,7 +134,7 @@ func (p *K6Plugin) WriteBytes(path string, b []byte) error {
 	return nil
 }
 
-// ClearFile removes all the contents of a file
+// ClearFile removes all the contents of a file.
 func (p *K6Plugin) ClearFile(path string) error {
 	f, err := os.OpenFile(path, os.O_RDWR, 0o644)
 	if err != nil {
@@ -155,8 +148,8 @@ func (p *K6Plugin) ClearFile(path string) error {
 	return nil
 }
 
-// RenameFile renames file from oldPath to newPath
-func (p K6Plugin) RenameFile(oldPath string, newPath string) error {
+// RenameFile renames a file from oldPath to newPath.
+func (p *K6Plugin) RenameFile(oldPath string, newPath string) error {
 	err := os.Rename(oldPath, newPath)
 	if err != nil {
 		return err
@@ -164,7 +157,7 @@ func (p K6Plugin) RenameFile(oldPath string, newPath string) error {
 	return nil
 }
 
-// DeleteFile deletes file
+// DeleteFile deletes a file.
 func (p *K6Plugin) DeleteFile(path string) error {
 	err := os.Remove(path)
 	if err != nil {
@@ -173,7 +166,7 @@ func (p *K6Plugin) DeleteFile(path string) error {
 	return nil
 }
 
-// RemoveRowsBetweenValues removes the rows from a file between start and end (inclusive)
+// RemoveRowsBetweenValues removes the rows from a file between start and end (inclusive).
 func (p *K6Plugin) RemoveRowsBetweenValues(path string, start, end int) error {
 	f, err := os.Open(path)
 	if err != nil {
