@@ -20,7 +20,7 @@ func init() {
 type K6Plugin struct{}
 
 // New creates a new instance of the csv and returns it.
-func (p *K6Plugin) csvWriter(csvFile string) *csv.Writer {
+func (p *K6Plugin) CSVWriter(csvFile string) *csv.Writer {
 
 	file, err := os.OpenFile(csvFile, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0755)
 	if err != nil {
