@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/csv"
 	"go.k6.io/k6/js/modules"
+	"log"
 	"math"
 	"os"
 	"sort"
@@ -17,6 +18,19 @@ func init() {
 
 // K6Plugin is the main structure for the plugin
 type K6Plugin struct{}
+
+// New creates a new instance of the csv and returns it.
+func (p *K6Plugin) csvWriter(csvFile string) *csv.Writer {
+
+	file, err := os.OpenFile(csvFile, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0755)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	writercsv := csv.NewWriter(file)
+	defer writercsv.Flush()
+	return writercsv
+}
 
 // WriteCSVHeader writes the response to the specified CSV writer as a header.
 func (p *K6Plugin) WriteCSVHeader(writer *csv.Writer, response string) {
