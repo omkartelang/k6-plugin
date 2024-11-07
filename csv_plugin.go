@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/csv"
 	"go.k6.io/k6/js/modules"
+	"io"
 	"math"
 	"os"
 	"sort"
@@ -208,4 +209,19 @@ func (p *K6Plugin) RemoveRowsBetweenValues(path string, start, end int) error {
 		return err
 	}
 	return nil
+}
+
+// ReadString reads the content of a file and returns it as a string.
+func (p *K6Plugin) ReadString(path string) (string, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return "", err
+	}
+	defer f.Close()
+
+	content, err := io.ReadAll(f)
+	if err != nil {
+		return "", err
+	}
+	return string(content), nil
 }
